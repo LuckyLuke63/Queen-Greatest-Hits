@@ -337,6 +337,14 @@
 
         function closeCurrentPlayer() {
             if (currentPlayer) {
+                // Ferma la riproduzione di YouTube ricaricando l'iframe
+                const youtubeIframe = currentPlayer.querySelector('iframe[src*="youtube"]');
+                if (youtubeIframe) {
+                    const originalSrc = youtubeIframe.src;
+                    youtubeIframe.src = '';
+                    youtubeIframe.src = originalSrc;
+                }
+                
                 currentPlayer.classList.remove('active');
                 const activeItem = document.querySelector('.song-item.active');
                 if (activeItem) {
@@ -412,6 +420,7 @@
     </script>
 </body>
 </html>
+
 
 
 

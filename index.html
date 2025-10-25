@@ -419,8 +419,8 @@
                         </div>
                     </div>
                    <div class="player-container" id="${songId}-spotify">
-    <button class="close-player" onclick="closeCurrentPlayer()" title="Chiudi">×</button>
-    <iframe loading="lazy" src="https://open.spotify.com/embed/track/${song.spotifyId}"
+                        <button class="close-player" onclick="closeCurrentPlayer()" title="Chiudi">×</button>
+                        <iframe loading="lazy" src="https://open.spotify.com/embed/track/${song.spotifyId}" 
                                 height="152" 
                                 frameborder="0" 
                                 allowtransparency="true" 
@@ -428,8 +428,8 @@
                         </iframe>
                     </div>
                     <div class="player-container" id="${songId}-youtube">
-    <button class="close-player" onclick="closeCurrentPlayer()" title="Chiudi">×</button>
-    <iframe loading="lazy" src="https://www.youtube.com/embed/${song.youtubeId}
+                        <button class="close-player" onclick="closeCurrentPlayer()" title="Chiudi">×</button>
+                        <iframe loading="lazy" src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1&controls=1&rel=0" 
                                 height="315" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -448,6 +448,7 @@
     </script>
 </body>
 </html>
+
 
 
 

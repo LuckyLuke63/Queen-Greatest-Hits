@@ -363,14 +363,11 @@
 
         function closeCurrentPlayer() {
     if (currentPlayer) {
-        // Ferma la riproduzione rimuovendo completamente l'src
+        // Rimuovi e ricrea l'iframe per fermare completamente
         const iframe = currentPlayer.querySelector('iframe');
         if (iframe) {
-            const originalSrc = iframe.src;
-            iframe.src = 'about:blank';
-            setTimeout(() => {
-                iframe.src = originalSrc;
-            }, 100);
+            const newIframe = iframe.cloneNode(true);
+            iframe.parentNode.replaceChild(newIframe, iframe);
         }
         
         currentPlayer.classList.remove('active');
@@ -450,6 +447,7 @@
     </script>
 </body>
 </html>
+
 
 
 

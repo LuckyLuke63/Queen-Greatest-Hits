@@ -87,17 +87,25 @@
             background: rgba(255, 255, 255, 0.15);
             padding: 15px 20px;
             border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
         }
 
         .song-item:hover {
             background: rgba(255, 255, 255, 0.25);
-            transform: translateX(5px);
             border-left-color: #ffd700;
+        }
+
+        .song-item.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-left-color: #ffd700;
+        }
+
+        .song-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
 
         .song-info {
@@ -130,13 +138,14 @@
         .btn {
             padding: 8px 15px;
             border-radius: 20px;
-            text-decoration: none;
+            border: none;
             font-size: 0.9em;
             font-weight: 600;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             gap: 5px;
+            cursor: pointer;
         }
 
         .btn-spotify {
@@ -159,6 +168,33 @@
             transform: scale(1.05);
         }
 
+        .player-container {
+            margin-top: 15px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .player-container.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .player-container iframe {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
         footer {
             text-align: center;
             margin-top: 50px;
@@ -171,7 +207,7 @@
                 font-size: 1.8em;
             }
 
-            .song-item {
+            .song-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
@@ -223,76 +259,124 @@
     <script>
         const songs = {
             volume1: [
-                { title: "Bohemian Rhapsody", year: "1975", spotify: "https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv", youtube: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ" },
-                { title: "Another One Bites the Dust", year: "1980", spotify: "https://open.spotify.com/track/57JVGBtBLCfHw2muk5416J", youtube: "https://www.youtube.com/watch?v=rY0WxgSXdEE" },
-                { title: "Killer Queen", year: "1974", spotify: "https://open.spotify.com/track/76lBPKQDnCJYRdHJBEy3Q6", youtube: "https://www.youtube.com/watch?v=2ZBtPf7FOoM" },
-                { title: "Fat Bottomed Girls", year: "1978", spotify: "https://open.spotify.com/track/5PhYu3TErziCdLkKV2Ecmj", youtube: "https://www.youtube.com/watch?v=VMnjF1O4eH0" },
-                { title: "Bicycle Race", year: "1978", spotify: "https://open.spotify.com/track/60xosW3mvXYlnLhRhTNnPv", youtube: "https://www.youtube.com/watch?v=GugsCdLHm-Q" },
-                { title: "You're My Best Friend", year: "1975", spotify: "https://open.spotify.com/track/7XgbJDXA3khn8F3oYo8jTZ", youtube: "https://www.youtube.com/watch?v=HaZpZQG2z10" },
-                { title: "Don't Stop Me Now", year: "1978", spotify: "https://open.spotify.com/track/5T8EDUDqKcs6OSOwEsfqG7", youtube: "https://www.youtube.com/watch?v=HgzGwKwLmgM" },
-                { title: "Save Me", year: "1980", spotify: "https://open.spotify.com/track/3IRtEPzlxYhXaJfqZQq2vY", youtube: "https://www.youtube.com/watch?v=MmL3oTlsTEg" },
-                { title: "Crazy Little Thing Called Love", year: "1979", spotify: "https://open.spotify.com/track/7qjnI83VE4fgCJ4xQ1N73t", youtube: "https://www.youtube.com/watch?v=zO6D_BAuYCI" },
-                { title: "Somebody to Love", year: "1976", spotify: "https://open.spotify.com/track/4lIc16qOy5MHjZs1BohUlj", youtube: "https://www.youtube.com/watch?v=kijpcUv-b8M" },
-                { title: "Now I'm Here", year: "1974", spotify: "https://open.spotify.com/track/2t4rl0dFJYhVN6bHPyBzhL", youtube: "https://www.youtube.com/watch?v=nVwsLHZeSYk" },
-                { title: "Good Old-Fashioned Lover Boy", year: "1976", spotify: "https://open.spotify.com/track/4ZTwWPXQI86OdVYYE9eYKu", youtube: "https://www.youtube.com/watch?v=c0N4m_q4E1I" },
-                { title: "Play the Game", year: "1980", spotify: "https://open.spotify.com/track/1dIuqCGZ1tVgXlECGBbCHJ", youtube: "https://www.youtube.com/watch?v=6_5O-nUiZ_0" },
-                { title: "Flash", year: "1980", spotify: "https://open.spotify.com/track/4NhBqRiPvDCZfgzzkrAqwm", youtube: "https://www.youtube.com/watch?v=MS4_Z84-rRE" },
-                { title: "Seven Seas of Rhye", year: "1974", spotify: "https://open.spotify.com/track/7oGPJZMe2pVvGrLZCVXcNu", youtube: "https://www.youtube.com/watch?v=H2P_0fJEgC4" },
-                { title: "We Will Rock You", year: "1977", spotify: "https://open.spotify.com/track/4pbJqGIASGPr0ZpGpnWkDn", youtube: "https://www.youtube.com/watch?v=-tJYN-eG1zk" },
-                { title: "We Are the Champions", year: "1977", spotify: "https://open.spotify.com/track/7ccI9cStQbQdystvc6TvxD", youtube: "https://www.youtube.com/watch?v=04854XqcfCY" }
+                { title: "Bohemian Rhapsody", year: "1975", spotifyId: "4u7EnebtmKWzUH433cf5Qv", youtubeId: "fJ9rUzIMcZQ" },
+                { title: "Another One Bites the Dust", year: "1980", spotifyId: "57JVGBtBLCfHw2muk5416J", youtubeId: "rY0WxgSXdEE" },
+                { title: "Killer Queen", year: "1974", spotifyId: "76lBPKQDnCJYRdHJBEy3Q6", youtubeId: "2ZBtPf7FOoM" },
+                { title: "Fat Bottomed Girls", year: "1978", spotifyId: "5PhYu3TErziCdLkKV2Ecmj", youtubeId: "VMnjF1O4eH0" },
+                { title: "Bicycle Race", year: "1978", spotifyId: "60xosW3mvXYlnLhRhTNnPv", youtubeId: "GugsCdLHm-Q" },
+                { title: "You're My Best Friend", year: "1975", spotifyId: "7XgbJDXA3khn8F3oYo8jTZ", youtubeId: "HaZpZQG2z10" },
+                { title: "Don't Stop Me Now", year: "1978", spotifyId: "5T8EDUDqKcs6OSOwEsfqG7", youtubeId: "HgzGwKwLmgM" },
+                { title: "Save Me", year: "1980", spotifyId: "3IRtEPzlxYhXaJfqZQq2vY", youtubeId: "MmL3oTlsTEg" },
+                { title: "Crazy Little Thing Called Love", year: "1979", spotifyId: "7qjnI83VE4fgCJ4xQ1N73t", youtubeId: "zO6D_BAuYCI" },
+                { title: "Somebody to Love", year: "1976", spotifyId: "4lIc16qOy5MHjZs1BohUlj", youtubeId: "kijpcUv-b8M" },
+                { title: "Now I'm Here", year: "1974", spotifyId: "2t4rl0dFJYhVN6bHPyBzhL", youtubeId: "nVwsLHZeSYk" },
+                { title: "Good Old-Fashioned Lover Boy", year: "1976", spotifyId: "4ZTwWPXQI86OdVYYE9eYKu", youtubeId: "c0N4m_q4E1I" },
+                { title: "Play the Game", year: "1980", spotifyId: "1dIuqCGZ1tVgXlECGBbCHJ", youtubeId: "6_5O-nUiZ_0" },
+                { title: "Flash", year: "1980", spotifyId: "4NhBqRiPvDCZfgzzkrAqwm", youtubeId: "MS4_Z84-rRE" },
+                { title: "Seven Seas of Rhye", year: "1974", spotifyId: "7oGPJZMe2pVvGrLZCVXcNu", youtubeId: "H2P_0fJEgC4" },
+                { title: "We Will Rock You", year: "1977", spotifyId: "4pbJqGIASGPr0ZpGpnWkDn", youtubeId: "-tJYN-eG1zk" },
+                { title: "We Are the Champions", year: "1977", spotifyId: "7ccI9cStQbQdystvc6TvxD", youtubeId: "04854XqcfCY" }
             ],
             volume2: [
-                { title: "A Kind of Magic", year: "1986", spotify: "https://open.spotify.com/track/4F5YgB8GWJyHLGaWn9LxvS", youtube: "https://www.youtube.com/watch?v=0p_1QSUsbsM" },
-                { title: "Under Pressure", year: "1981", spotify: "https://open.spotify.com/track/1fmN6OZ8AhjudMJMTC96vC", youtube: "https://www.youtube.com/watch?v=a01QQZyl-_I" },
-                { title: "Radio Ga Ga", year: "1984", spotify: "https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8", youtube: "https://www.youtube.com/watch?v=azdwsXLmrHE" },
-                { title: "I Want It All", year: "1989", spotify: "https://open.spotify.com/track/2wnWRoDMD7ohzuMCDgxcSt", youtube: "https://www.youtube.com/watch?v=hFDcoX7s6rE" },
-                { title: "I Want to Break Free", year: "1984", spotify: "https://open.spotify.com/track/4wNQAZYJx32Hj7lxt0b7lJ", youtube: "https://www.youtube.com/watch?v=f4Mc-NYPHaQ" },
-                { title: "Innuendo", year: "1991", spotify: "https://open.spotify.com/track/0RSeNTq0WHBPIy0N6xFsGG", youtube: "https://www.youtube.com/watch?v=g2N0TkfrQhY" },
-                { title: "It's a Hard Life", year: "1984", spotify: "https://open.spotify.com/track/79CgGmZR6Z2jwQxMYYOyZ0", youtube: "https://www.youtube.com/watch?v=uHP-qgzUVLM" },
-                { title: "Breakthru", year: "1989", spotify: "https://open.spotify.com/track/1Z5gOt8dNjTh7P1Asa8wSF", youtube: "https://www.youtube.com/watch?v=CEjU9KVABao" },
-                { title: "Who Wants to Live Forever", year: "1986", spotify: "https://open.spotify.com/track/3xHCKbW7ysbJsLCbrtV52K", youtube: "https://www.youtube.com/watch?v=_Jtpf8N5IDE" },
-                { title: "Headlong", year: "1991", spotify: "https://open.spotify.com/track/7vXHNjjNb6PAMmjXYLnIHv", youtube: "https://www.youtube.com/watch?v=LRH2YJfUvOE" },
-                { title: "The Miracle", year: "1989", spotify: "https://open.spotify.com/track/24zGNbGDY68WbvSJSGYQbp", youtube: "https://www.youtube.com/watch?v=aOvh1yQvlnE" },
-                { title: "I'm Going Slightly Mad", year: "1991", spotify: "https://open.spotify.com/track/0WWs4uvmpLmqbhzUvbBz44", youtube: "https://www.youtube.com/watch?v=Od6hY_50Dh0" },
-                { title: "The Invisible Man", year: "1989", spotify: "https://open.spotify.com/track/0ZnPqC2uFv7YfUwBg76v0I", youtube: "https://www.youtube.com/watch?v=eQALCyJ10O0" },
-                { title: "Hammer to Fall", year: "1984", spotify: "https://open.spotify.com/track/0P3nPBQNGNQxDdxUxLWS16", youtube: "https://www.youtube.com/watch?v=JU5LMG3WFBw" },
-                { title: "Friends Will Be Friends", year: "1986", spotify: "https://open.spotify.com/track/6ELmHajjrRPpsTFNaGJqPb", youtube: "https://www.youtube.com/watch?v=SLaA4bbuSSs" },
-                { title: "The Show Must Go On", year: "1991", spotify: "https://open.spotify.com/track/3LciKLkPWtj9rY1g2V8RwX", youtube: "https://www.youtube.com/watch?v=t99KH0TR-J4" },
-                { title: "One Vision", year: "1985", spotify: "https://open.spotify.com/track/2iXPZE1y2o3OJJLOcX4xUd", youtube: "https://www.youtube.com/watch?v=0_1IMZmJe-U" }
+                { title: "A Kind of Magic", year: "1986", spotifyId: "4F5YgB8GWJyHLGaWn9LxvS", youtubeId: "0p_1QSUsbsM" },
+                { title: "Under Pressure", year: "1981", spotifyId: "1fmN6OZ8AhjudMJMTC96vC", youtubeId: "a01QQZyl-_I" },
+                { title: "Radio Ga Ga", year: "1984", spotifyId: "4PTG3Z6ehGkBFwjybzWkR8", youtubeId: "azdwsXLmrHE" },
+                { title: "I Want It All", year: "1989", spotifyId: "2wnWRoDMD7ohzuMCDgxcSt", youtubeId: "hFDcoX7s6rE" },
+                { title: "I Want to Break Free", year: "1984", spotifyId: "4wNQAZYJx32Hj7lxt0b7lJ", youtubeId: "f4Mc-NYPHaQ" },
+                { title: "Innuendo", year: "1991", spotifyId: "0RSeNTq0WHBPIy0N6xFsGG", youtubeId: "g2N0TkfrQhY" },
+                { title: "It's a Hard Life", year: "1984", spotifyId: "79CgGmZR6Z2jwQxMYYOyZ0", youtubeId: "uHP-qgzUVLM" },
+                { title: "Breakthru", year: "1989", spotifyId: "1Z5gOt8dNjTh7P1Asa8wSF", youtubeId: "CEjU9KVABao" },
+                { title: "Who Wants to Live Forever", year: "1986", spotifyId: "3xHCKbW7ysbJsLCbrtV52K", youtubeId: "_Jtpf8N5IDE" },
+                { title: "Headlong", year: "1991", spotifyId: "7vXHNjjNb6PAMmjXYLnIHv", youtubeId: "LRH2YJfUvOE" },
+                { title: "The Miracle", year: "1989", spotifyId: "24zGNbGDY68WbvSJSGYQbp", youtubeId: "aOvh1yQvlnE" },
+                { title: "I'm Going Slightly Mad", year: "1991", spotifyId: "0WWs4uvmpLmqbhzUvbBz44", youtubeId: "Od6hY_50Dh0" },
+                { title: "The Invisible Man", year: "1989", spotifyId: "0ZnPqC2uFv7YfUwBg76v0I", youtubeId: "eQALCyJ10O0" },
+                { title: "Hammer to Fall", year: "1984", spotifyId: "0P3nPBQNGNQxDdxUxLWS16", youtubeId: "JU5LMG3WFBw" },
+                { title: "Friends Will Be Friends", year: "1986", spotifyId: "6ELmHajjrRPpsTFNaGJqPb", youtubeId: "SLaA4bbuSSs" },
+                { title: "The Show Must Go On", year: "1991", spotifyId: "3LciKLkPWtj9rY1g2V8RwX", youtubeId: "t99KH0TR-J4" },
+                { title: "One Vision", year: "1985", spotifyId: "2iXPZE1y2o3OJJLOcX4xUd", youtubeId: "0_1IMZmJe-U" }
             ],
             volume3: [
-                { title: "The Show Must Go On", year: "1991", spotify: "https://open.spotify.com/track/3LciKLkPWtj9rY1g2V8RwX", youtube: "https://www.youtube.com/watch?v=t99KH0TR-J4" },
-                { title: "Under Pressure", year: "1981", spotify: "https://open.spotify.com/track/1fmN6OZ8AhjudMJMTC96vC", youtube: "https://www.youtube.com/watch?v=a01QQZyl-_I" },
-                { title: "Barcelona", year: "1987", spotify: "https://open.spotify.com/track/2SiXAy7TuUkycRVbbWDEpo", youtube: "https://www.youtube.com/watch?v=C6KaCRjUuys" },
-                { title: "Too Much Love Will Kill You", year: "1988", spotify: "https://open.spotify.com/track/4h9wh7iOZ0GGn1EXQ0xLsP", youtube: "https://www.youtube.com/watch?v=ivbO3s1udic" },
-                { title: "Somebody to Love", year: "1976", spotify: "https://open.spotify.com/track/4lIc16qOy5MHjZs1BohUlj", youtube: "https://www.youtube.com/watch?v=kijpcUv-b8M" },
-                { title: "You Don't Fool Me", year: "1995", spotify: "https://open.spotify.com/track/2hYqW0jxh8gSxXdkrqG1JJ", youtube: "https://www.youtube.com/watch?v=K0miK6Zzz9w" },
-                { title: "Heaven for Everyone", year: "1995", spotify: "https://open.spotify.com/track/7z1jGcW9qnxgKlsWXMk3OD", youtube: "https://www.youtube.com/watch?v=pD1gDSao1eY" },
-                { title: "Las Palabras de Amor", year: "1982", spotify: "https://open.spotify.com/track/7AiRiAjVc9VUhXJaW0vTxZ", youtube: "https://www.youtube.com/watch?v=gAjYneLHMeo" },
-                { title: "Driven by You", year: "1991", spotify: "https://open.spotify.com/track/4LFXuLfBqX8KVG8p8HuLXl", youtube: "https://www.youtube.com/watch?v=BLhNfD9N9Ss" },
-                { title: "Living on My Own", year: "1985", spotify: "https://open.spotify.com/track/3r7hpgQlCZBHRNQfE18mfz", youtube: "https://www.youtube.com/watch?v=o-urnlaJpOA" },
-                { title: "Let Me Live", year: "1995", spotify: "https://open.spotify.com/track/1wslG9pvdGYhHJ2YQlkQUu", youtube: "https://www.youtube.com/watch?v=TjgSnJyjGfo" }
+                { title: "The Show Must Go On", year: "1991", spotifyId: "3LciKLkPWtj9rY1g2V8RwX", youtubeId: "t99KH0TR-J4" },
+                { title: "Under Pressure", year: "1981", spotifyId: "1fmN6OZ8AhjudMJMTC96vC", youtubeId: "a01QQZyl-_I" },
+                { title: "Barcelona", year: "1987", spotifyId: "2SiXAy7TuUkycRVbbWDEpo", youtubeId: "C6KaCRjUuys" },
+                { title: "Too Much Love Will Kill You", year: "1988", spotifyId: "4h9wh7iOZ0GGn1EXQ0xLsP", youtubeId: "ivbO3s1udic" },
+                { title: "Somebody to Love", year: "1976", spotifyId: "4lIc16qOy5MHjZs1BohUlj", youtubeId: "kijpcUv-b8M" },
+                { title: "You Don't Fool Me", year: "1995", spotifyId: "2hYqW0jxh8gSxXdkrqG1JJ", youtubeId: "K0miK6Zzz9w" },
+                { title: "Heaven for Everyone", year: "1995", spotifyId: "7z1jGcW9qnxgKlsWXMk3OD", youtubeId: "pD1gDSao1eY" },
+                { title: "Las Palabras de Amor", year: "1982", spotifyId: "7AiRiAjVc9VUhXJaW0vTxZ", youtubeId: "gAjYneLHMeo" },
+                { title: "Driven by You", year: "1991", spotifyId: "4LFXuLfBqX8KVG8p8HuLXl", youtubeId: "BLhNfD9N9Ss" },
+                { title: "Living on My Own", year: "1985", spotifyId: "3r7hpgQlCZBHRNQfE18mfz", youtubeId: "o-urnlaJpOA" },
+                { title: "Let Me Live", year: "1995", spotifyId: "1wslG9pvdGYhHJ2YQlkQUu", youtubeId: "TjgSnJyjGfo" }
             ]
         };
+
+        let currentPlayer = null;
+
+        function closeCurrentPlayer() {
+            if (currentPlayer) {
+                currentPlayer.style.display = 'none';
+                const activeItem = document.querySelector('.song-item.active');
+                if (activeItem) {
+                    activeItem.classList.remove('active');
+                }
+                currentPlayer = null;
+            }
+        }
+
+        function openPlayer(playerId, songItem) {
+            const playerContainer = document.getElementById(playerId);
+            
+            if (currentPlayer === playerContainer) {
+                closeCurrentPlayer();
+                return;
+            }
+            
+            closeCurrentPlayer();
+            playerContainer.style.display = 'block';
+            songItem.classList.add('active');
+            currentPlayer = playerContainer;
+            
+            playerContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
 
         function renderSongs(volume, containerId) {
             const container = document.getElementById(containerId);
             volume.forEach((song, index) => {
+                const songId = `${containerId}-song-${index}`;
                 const songItem = document.createElement('div');
                 songItem.className = 'song-item';
                 songItem.innerHTML = `
-                    <div class="song-info">
-                        <span class="song-number">${index + 1}.</span>
-                        <span class="song-title">${song.title}</span>
-                        <span class="song-year">(${song.year})</span>
+                    <div class="song-header">
+                        <div class="song-info">
+                            <span class="song-number">${index + 1}.</span>
+                            <span class="song-title">${song.title}</span>
+                            <span class="song-year">(${song.year})</span>
+                        </div>
+                        <div class="song-links">
+                            <button class="btn btn-spotify" onclick="openPlayer('${songId}-spotify', this.closest('.song-item'))" title="Ascolta su Spotify">
+                                🎵 Spotify
+                            </button>
+                            <button class="btn btn-youtube" onclick="openPlayer('${songId}-youtube', this.closest('.song-item'))" title="Guarda su YouTube">
+                                ▶️ YouTube
+                            </button>
+                        </div>
                     </div>
-                    <div class="song-links">
-                        <a href="${song.spotify}" target="_blank" class="btn btn-spotify" title="Ascolta su Spotify">
-                            🎵 Spotify
-                        </a>
-                        <a href="${song.youtube}" target="_blank" class="btn btn-youtube" title="Guarda su YouTube">
-                            ▶️ YouTube
-                        </a>
+                    <div class="player-container" id="${songId}-spotify">
+                        <iframe src="https://open.spotify.com/embed/track/${song.spotifyId}" 
+                                height="152" 
+                                frameborder="0" 
+                                allowtransparency="true" 
+                                allow="encrypted-media">
+                        </iframe>
+                    </div>
+                    <div class="player-container" id="${songId}-youtube">
+                        <iframe src="https://www.youtube.com/embed/${song.youtubeId}" 
+                                height="315" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
                     </div>
                 `;
                 container.appendChild(songItem);
@@ -306,9 +390,6 @@
     </script>
 </body>
 </html>
-
-
-
 
 
 

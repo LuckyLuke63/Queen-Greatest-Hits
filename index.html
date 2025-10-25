@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎵 Queen Greatest Hits I, II & III - The Platinum Collection</title>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Queen Greatest Hits - The Platinum Collection">
+    <meta property="og:description" content="45 brani indimenticabili dei Queen - Greatest Hits I, II & III">
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/5/5e/Queen_Greatest_Hits.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Queen Greatest Hits - The Platinum Collection">
+    <meta property="twitter:description" content="45 brani indimenticabili dei Queen - Greatest Hits I, II & III">
+    <meta property="twitter:image" content="https://upload.wikimedia.org/wikipedia/en/5/5e/Queen_Greatest_Hits.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/en/5/5e/Queen_Greatest_Hits.png">
+    
     <style>
         * {
             margin: 0;
@@ -13,8 +29,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 50%, #A8A8A8 100%);
+            color: #333;
             min-height: 100vh;
             padding: 20px;
         }
@@ -28,21 +44,23 @@
             text-align: center;
             margin-bottom: 40px;
             padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            color: #333;
         }
 
         .subtitle {
             font-size: 1.2em;
-            opacity: 0.9;
+            opacity: 0.8;
+            color: #555;
         }
 
         .album-cover {
@@ -63,19 +81,20 @@
         }
 
         .volume-section {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         .volume-title {
             font-size: 2em;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+            color: #333;
         }
 
         .song-list {
@@ -84,7 +103,7 @@
         }
 
         .song-item {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.5);
             padding: 15px 20px;
             border-radius: 10px;
             transition: all 0.3s ease;
@@ -92,12 +111,12 @@
         }
 
         .song-item:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.8);
             border-left-color: #ffd700;
         }
 
         .song-item.active {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
             border-left-color: #ffd700;
         }
 
@@ -122,12 +141,14 @@
         .song-title {
             font-size: 1.1em;
             font-weight: 600;
+            color: #222;
         }
 
         .song-year {
             font-size: 0.9em;
-            opacity: 0.8;
+            opacity: 0.7;
             margin-left: 10px;
+            color: #666;
         }
 
         .song-links {
@@ -199,7 +220,8 @@
             text-align: center;
             margin-top: 50px;
             padding: 20px;
-            opacity: 0.8;
+            opacity: 0.7;
+            color: #555;
         }
 
         @media (max-width: 768px) {
@@ -229,7 +251,7 @@
         </header>
 
         <div class="album-cover">
-            <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Queen_Greatest_Hits.png" alt="Queen Greatest Hits Cover" onerror="this.src='https://via.placeholder.com/400x400/667eea/ffffff?text=Queen+Greatest+Hits'">
+            <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Queen_Greatest_Hits.png" alt="Queen Greatest Hits Cover" onerror="this.src='https://via.placeholder.com/400x400/C0C0C0/333333?text=Queen+Greatest+Hits'">
         </div>
 
         <!-- VOLUME I -->
@@ -315,7 +337,7 @@
 
         function closeCurrentPlayer() {
             if (currentPlayer) {
-                currentPlayer.style.display = 'none';
+                currentPlayer.classList.remove('active');
                 const activeItem = document.querySelector('.song-item.active');
                 if (activeItem) {
                     activeItem.classList.remove('active');
@@ -333,7 +355,7 @@
             }
             
             closeCurrentPlayer();
-            playerContainer.style.display = 'block';
+            playerContainer.classList.add('active');
             songItem.classList.add('active');
             currentPlayer = playerContainer;
             
@@ -371,7 +393,7 @@
                         </iframe>
                     </div>
                     <div class="player-container" id="${songId}-youtube">
-                        <iframe src="https://www.youtube.com/embed/${song.youtubeId}" 
+                        <iframe src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1" 
                                 height="315" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -390,8 +412,6 @@
     </script>
 </body>
 </html>
-
-
 
 
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>I più grandi successi dei Matia Bazar</title>
+  <title>I più grandi successi dei Queen</title>
   <style>
     body { font-family: Arial,sans-serif; background: linear-gradient(135deg,#f2ebe0 0%,#ede0d3 100%); color: #3b2f2f; max-width:800px; margin:2em auto; padding:0 1em;}
     h1 { text-align:center; font-size:2.2em; margin-bottom:.2em; color:#8b4513;}
@@ -39,24 +39,25 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
   </style>
-  <meta property="og:title" content="🎵 Souvenir: The Very Best of Matia Bazar">
+  <meta property="og:title" content="🎵 Queen Greatest Hits I, II & III - The Platinum Collection">
   <meta property="og:description" content="Ascolta le anteprime e guarda i video dei loro più grandi successi."> 
-  <meta property="og:image" content="https://raw.githubusercontent.com/LuckyLuke63/The-Very-Best-of-Matia-Bazar/main/souvenir_copertina_cd.jpg">
+  <meta property="og:image" content="https://raw.githubusercontent.com/LuckyLuke63/Queen-Greatest-Hits/blob/main/queen_copertina_cd.jpg">
   <meta property="og:image:width" content="600"> 
   <meta property="og:image:height" content="600">
   <meta property="og:type" content="website">
 </head>
 <body>
-  <h1>🎵 Souvenir: The Very Best of Matia Bazar</h1>
-  <div class="subtitle">30 brani indimenticabili con anteprime Spotify e video YouTube</div>
+  <h1>🎵 Queen Greatest Hits I, II & III - The Platinum Collection</h1>
+  <div class="subtitle">45 brani indimenticabili con anteprime Spotify e video YouTube</div>
   <div class="album-main-cover">
-    <img src="https://raw.githubusercontent.com/LuckyLuke63/The-Very-Best-of-Matia-Bazar/main/souvenir_copertina_cd.jpg" alt="Copertina Album Souvenir: The Very Best of Matia Bazar">
+    <img src="https://raw.githubusercontent.com/LuckyLuke63/Queen-Greatest-Hits/blob/main/queen_copertina_cd.jpg" alt="Copertina Album Queen Greatest Hits I, II & III - The Platinum Collection">
   </div>
   <div class="controls">
     <label for="cdSel"><strong>Cd:</strong></label>
     <select id="cdSel" onchange="renderCD(this.value)">
       <option value="CD1">CD1</option>
       <option value="CD2">CD2</option>
+      <option value="CD3">CD3</option>
     </select>
   </div>
 
@@ -77,7 +78,7 @@
     // ma devono essere verificati con i video ufficiali.
     const tracksByCd = {
       "CD1": [
-        {rank:1, title:"Per un'ora d'amore", artist:"", spotifyId:"4iOSMIthFJtpAv9C7rUo0C", youtubeId:"_KbXaHX-fEA"}, 
+        {rank:1, title:"Bohemian Rapsody", artist:"", spotifyId:"6tqmI7wZXTo2Frur1hWXNU", youtubeId:"fJ9rUzIMcZQ"}, 
         {rank:2, title:"Solo tu", artist:"", spotifyId:"4X8Inh1pfQHQsrcoNLm7tC", youtubeId:"0ThncqIF7j4"},
         {rank:3, title:"Cavallo bianco", artist:"", spotifyId:"6GYYsIzkWLh6Yc6ijGeaKF", youtubeId:"z7gUIyeS3Ss"},
         {rank:4, title:"C'è tutto un mondo intorno", artist:"", spotifyId:"4ASccwuRpytBHkcu6EsZ3Q", youtubeId:"Cda1FUfHexM"},
@@ -108,6 +109,10 @@
         {rank:12, title:"Ti sento", artist:"", spotifyId:"72BnKkKnrOeCDY9vy2avFk", youtubeId:"FOadUytpMEU"},
         {rank:13, title:"Nell'era delle automobili", artist:"", spotifyId:"6q4uxh3jV0L00l0bf2IgWv", youtubeId:"Rhjy-cKvN7o"},
         {rank:14, title:"La prima stella della sera", artist:"", spotifyId:"0TKr1wUkJT3rYhoOmjaANp", youtubeId:"pd8sxJg5-EU"},
+        {rank:15, title:"Stasera... che sera! (live)", artist:"", spotifyId:"3ZJqmvWWIEhBZI6ddcFaQu", youtubeId:"FLEyAjnBs9o"}        
+      ]
+      "CD3": [
+        {rank:1, title:"Vacanze romane", artist:"", spotifyId:"4PRdGQsEQeqvfYZTPN6pDC", youtubeId:"Hzr-0XIk0no"},
         {rank:15, title:"Stasera... che sera! (live)", artist:"", spotifyId:"3ZJqmvWWIEhBZI6ddcFaQu", youtubeId:"FLEyAjnBs9o"}        
       ]
     };
@@ -243,6 +248,7 @@
   </script>
 </body>
 </html>
+
 
 
 

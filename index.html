@@ -1,253 +1,312 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>I più grandi successi dei Queen</title>
-  <style>
-    body { font-family: Arial,sans-serif; background: linear-gradient(135deg,#f2ebe0 0%,#ede0d3 100%); color: #3b2f2f; max-width:800px; margin:2em auto; padding:0 1em;}
-    h1 { text-align:center; font-size:2.2em; margin-bottom:.2em; color:#8b4513;}
-    .subtitle { text-align:center; margin-bottom:1.5em; color:#7d5a50; font-style:italic;}
-    .controls { display:flex; justify-content:center; align-items:center; margin-bottom:1.5em; gap:.5em;}
-    select { padding:8px 12px; border-radius:6px; border:2px solid #a65e2e; background:white; font-size:1em; color:#3b2f2f;}
-    .song { background: #fff; border-radius:12px; padding:16px; margin-bottom:1.2em; display:flex; align-items:center; box-shadow:0 4px 12px rgba(0,0,0,0.15); transition:transform 0.2s;}
-    .song:hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.2);}
-    .album-cover { width:64px; height:64px; border-radius:8px; margin-right:16px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:2em; color:#ccc; flex-shrink:0; overflow:hidden;}
-    .album-cover img { width:100%; height:100%; object-fit:cover; border-radius:8px;}
-    .song-info { flex:1; margin-right:12px;}
-    .rank { font-size:1.5em; font-weight:bold; color:#a65e2e; margin-right:8px;}
-    .title { font-weight:bold; font-size:1.1em; color:#2c1810;}
-    .artist { color:#666; font-size:0.95em; margin-top:2px;}
-    button { background: linear-gradient(135deg,#1db954 0%,#1ed760 100%); border:none; color:white; padding:10px 16px; border-radius:25px; cursor:pointer; font-size:0.9em; font-weight:600; transition:all 0.2s; box-shadow:0 2px 8px rgba(29,185,84,0.3);}
-    button:hover { background: linear-gradient(135deg,#17a44c 0%,#1bcf5a 100%); transform:translateY(-1px);}
-    #overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; align-items:center; justify-content:center; z-index:1000;}
-    #player { background:#fff; border-radius:16px; padding:24px; max-width:420px; width:90%; text-align:center; box-shadow:0 12px 32px rgba(0,0,0,0.3);}
-    #player h3 { margin:0 0 8px; color:#2c1810; font-size:1.3em;}
-    #player p { margin:0 0 16px; color:#666;}
-    #close { margin-top:16px; background: linear-gradient(135deg,#c0392b 0%,#e74c3c 100%);}
-    #close:hover { background: linear-gradient(135deg,#a93226 0%,#cb4335 100%);}
-    .cd-badge { background:#a65e2e; color:white; padding:4px 8px; border-radius:12px; font-size:0.7em; font-weight:bold; margin-left:8px;}
-    /* NUOVO STILE PER L'IMMAGINE DI COPERTINA */
-    .album-main-cover { 
-      text-align: center; 
-      margin-bottom: 2em;
-    }
-    .album-main-cover img {
-      max-width: 75%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-  </style>
-  <meta property="og:title" content="🎵 Queen Greatest Hits I, II & III - The Platinum Collection">
-  <meta property="og:description" content="Ascolta le anteprime e guarda i video dei loro più grandi successi!"> 
-  <meta property="og:image" content="https://github.com/LuckyLuke63/Queen-Greatest-Hits/blob/main/queen_copertina_cd.jpg">
-  <meta property="og:image:width" content="600"> 
-  <meta property="og:image:height" content="600">
-  <meta property="og:type" content="website">
-</head>
-<body>
-  <h1>🎵 Queen Greatest Hits I, II & III - The Platinum Collection</h1>
-  <div class="subtitle">45 brani indimenticabili con anteprime Spotify e video YouTube</div>
-  <div class="album-main-cover">
-    <img src="https://luckyluke63.github.io/Queen-Greatest-Hits/queen_copertina_cd.jpg" alt="Queen Greatest Hits" alt="Copertina Album Queen Greatest Hits I, II & III - The Platinum Collection">
-  </div>
-  <div class="controls">
-    <label for="cdSel"><strong>Cd:</strong></label>
-    <select id="cdSel" onchange="renderCD(this.value)">
-      <option value="CD1">CD1</option>
-      <option value="CD2">CD2</option>
-      <option value="CD3">CD3</option>
-    </select>
-  </div>
-
-  <div id="list"></div>
-
-  <div id="overlay">
-    <div id="player">
-      <h3 id="track-title"></h3>
-      <p id="track-artist"></p>
-      <iframe id="sp-player" width="300" height="80" src="" frameborder="0" allow="autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <br>
-      <button id="close" onclick="closePlayer()">Chiudi</button>
-    </div>
-  </div>
-
-  <script>
-    // NOTA: Gli ID di YouTube qui sotto sono stati aggiunti per la funzionalità embed,
-    // ma devono essere verificati con i video ufficiali.
-    const tracksByCd = {
-      "CD1": [
-        {rank:1, title:"Bohemian Rapsody", artist:"", spotifyId:"6tqmI7wZXTo2Frur1hWXNU", youtubeId:"fJ9rUzIMcZQ"}, 
-        {rank:2, title:"Solo tu", artist:"", spotifyId:"4X8Inh1pfQHQsrcoNLm7tC", youtubeId:"0ThncqIF7j4"},
-        {rank:3, title:"Cavallo bianco", artist:"", spotifyId:"6GYYsIzkWLh6Yc6ijGeaKF", youtubeId:"z7gUIyeS3Ss"},
-        {rank:4, title:"C'è tutto un mondo intorno", artist:"", spotifyId:"4ASccwuRpytBHkcu6EsZ3Q", youtubeId:"Cda1FUfHexM"},
-        {rank:5, title:"Angelina", artist:"", spotifyId:"7AoeEiqlotWemqTfXKCx9S", youtubeId:"wpL4KrSqbvc"},
-        {rank:6, title:"Aria", artist:"", spotifyId:"2pU4PZvGrPGeW8Z0vlVRKg", youtubeId:"zg5i6pSukJ0"},
-        {rank:7, title:"Elettrochoc", artist:"", spotifyId:"4zWnTKJ6UzPWvhTfmDDPat", youtubeId:"Jn_kSPi05Y4"},
-        {rank:8, title:"Oggi è già domani", artist:"", spotifyId:"7vr9byF48h6CgkIyXss5J2", youtubeId:"hyK0QMEffV0"},
-        {rank:9, title:"Aristocratica", artist:"", spotifyId:"0wpNrcLXYg2T2UGiI3DBBd", youtubeId:"_dkm-E0QZYg"},
-        {rank:10, title:"E dirsi ciao", artist:"", spotifyId:"4ZibZyu0s4Oi44QvUWXw9h", youtubeId:"H2qHHLfx6eU"},
-        {rank:11, title:"Mi manchi ancora", artist:"", spotifyId:"4KtVE20UotBmXxDBrMfApg", youtubeId:"kaFSPBU2jVM"},
-        {rank:12, title:"Stringimi", artist:"", spotifyId:"5Uc9pSuB1HHFIfQqEgPkpy", youtubeId:"E9gElSWn6xc"},
-        {rank:13, title:"Sentimentale", artist:"", spotifyId:"26GJg4f7BvFAYmZmFbomt8", youtubeId:"X3N0K55rWnE"},
-        {rank:14, title:"Vaghe stelle dell'Orsa", artist:"", spotifyId:"3nId0fgpMu9pVKtgaXoFex", youtubeId:"AZSMgtfRk-o"},
-        {rank:15, title:"La única estrella verdadera", artist:"", spotifyId:"2ZYFednNRDngMdb7B8UVrl", youtubeId:"lhgjhRcgCTQ"}
-      ],
-      "CD2": [
-        {rank:1, title:"Vacanze romane", artist:"", spotifyId:"4PRdGQsEQeqvfYZTPN6pDC", youtubeId:"Hzr-0XIk0no"},
-        {rank:2, title:"Stasera che sera", artist:"", spotifyId:"1uz6If8Tcbjm3xyxQ48IjV", youtubeId:"Y8721XyQo5Q"},
-        {rank:3, title:"Dieci piccoli indiani", artist:"", spotifyId:"7H7KIFAHoDThpK1SGdLZfj", youtubeId:"e9s6NHdTj8A"},
-        {rank:4, title:"Souvenir", artist:"", spotifyId:"0ysShiwWlpQOVBokdQZYWu", youtubeId:"sj7zF8xmeP8"},
-        {rank:5, title:"Mister Mandarino", artist:"", spotifyId:"4bvvHKF7yUE8x3I9ltIjFT", youtubeId:"RLLZhpOv8o4"},
-        {rank:6, title:"Besame", artist:"", spotifyId:"2nssiA5nctYF1vIY8ZsTE3", youtubeId:"NDub_5T5aw"},
-        {rank:7, title:"Il video sono io", artist:"", spotifyId:"5mbMtlfQA4JI8Gnm5c2tnl", youtubeId:"0HxhnZoT59s"},
-        {rank:8, title:"Se tu", artist:"", spotifyId:"3wAlhDykuSDqpvAeb5BROU", youtubeId:"yoMUovqutrA"},
-        {rank:9, title:"Fantasia", artist:"", spotifyId:"6G168xLBwydKusMFd3Xfge", youtubeId:"0aQHZ_d6XXw"},
-        {rank:10, title:"Fuori orario", artist:"", spotifyId:"66EQTL6MeQE6YtX3hM59Zh", youtubeId:"rel9LeL83zo"},
-        {rank:11, title:"Noi", artist:"", spotifyId:"3Spc4cey6l96hAceKvWuie", youtubeId:"KU_dp-oJmoE"},
-        {rank:12, title:"Ti sento", artist:"", spotifyId:"72BnKkKnrOeCDY9vy2avFk", youtubeId:"FOadUytpMEU"},
-        {rank:13, title:"Nell'era delle automobili", artist:"", spotifyId:"6q4uxh3jV0L00l0bf2IgWv", youtubeId:"Rhjy-cKvN7o"},
-        {rank:14, title:"La prima stella della sera", artist:"", spotifyId:"0TKr1wUkJT3rYhoOmjaANp", youtubeId:"pd8sxJg5-EU"},
-        {rank:15, title:"Stasera... che sera! (live)", artist:"", spotifyId:"3ZJqmvWWIEhBZI6ddcFaQu", youtubeId:"FLEyAjnBs9o"}        
-      ]
-      "CD3": [
-        {rank:1, title:"Vacanze romane", artist:"", spotifyId:"4PRdGQsEQeqvfYZTPN6pDC", youtubeId:"Hzr-0XIk0no"},
-        {rank:15, title:"Stasera... che sera! (live)", artist:"", spotifyId:"3ZJqmvWWIEhBZI6ddcFaQu", youtubeId:"FLEyAjnBs9o"}        
-      ]
-    };
-
-    async function getCoverArt(spotifyId) {
-      try {
-        const response = await fetch(`https://open.spotify.com/oembed?url=https://open.spotify.com/track/${spotifyId}`);
-        const data = await response.json();
-        return data.thumbnail_url || null;
-      } catch (error) { return null; }
-    }
-
-    async function renderCD(cd) {
-      const list = document.getElementById('list');
-      list.innerHTML = '<div style="text-align:center;padding:20px;">Caricamento copertine...</div>';
-      const tracks = tracksByCd[cd];
-      list.innerHTML = '';
-      for (const track of tracks) {
-        const div = document.createElement('div');
-        div.className = 'song';
-        const coverDiv = document.createElement('div');
-        coverDiv.className = 'album-cover';
-        coverDiv.innerHTML = '🎵';
-
-        const info = document.createElement('div');
-        info.className = 'song-info';
-        info.innerHTML = `
-          <div>
-            <span class='rank'>${track.rank}.</span>
-            <span class='title'>${track.title}</span>
-            <span class='cd-badge'>${cd}</span>
-          </div>
-          <div class='artist'>${track.artist}</div>
-        `;
-
-        // Contenitore per i pulsanti
-        const controlsDiv = document.createElement('div');
-        controlsDiv.style.display = 'flex'; 
-        controlsDiv.style.flexDirection = 'column';
-        controlsDiv.style.gap = '8px'; 
-        
-        // Pulsante Spotify (CORRETTO: Ora chiama openSpotifyPlayer)
-        const btnSpotify = document.createElement('button');
-        btnSpotify.textContent = 'Ascolta 30s (Spotify)';
-        btnSpotify.onclick = () => openSpotifyPlayer(track.spotifyId, track.title, track.artist);
-        
-        // Pulsante Youtube 
-        if (track.youtubeId) {
-            const btnYoutube = document.createElement('button');
-            btnYoutube.textContent = 'Guarda Video (YouTube)';
-            // Stili per il pulsante YouTube (Rosso)
-            btnYoutube.style.background = 'linear-gradient(135deg, #FF0000 0%, #D80000 100%)'; 
-            btnYoutube.style.boxShadow = '0 2px 8px rgba(255, 0, 0, 0.3)';
-            btnYoutube.onmouseover = () => btnYoutube.style.background = 'linear-gradient(135deg, #CC0000 0%, #B80000 100%)';
-            btnYoutube.onmouseout = () => btnYoutube.style.background = 'linear-gradient(135deg, #FF0000 0%, #D80000 100%)';
-
-            btnYoutube.onclick = () => openYoutubePlayer(track.youtubeId, track.title, track.artist);
-            controlsDiv.appendChild(btnYoutube);
-        } else {
-             const btnYoutubeDisabled = document.createElement('button');
-             btnYoutubeDisabled.textContent = 'Video non disponibile';
-             btnYoutubeDisabled.disabled = true;
-             btnYoutubeDisabled.style.opacity = '0.5';
-             controlsDiv.appendChild(btnYoutubeDisabled);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Queen Greatest Hits I, II & III - The Platinum Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        controlsDiv.appendChild(btnSpotify);
-        div.appendChild(coverDiv);
-        div.appendChild(info);
-        div.appendChild(controlsDiv);
-        list.appendChild(div);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-        getCoverArt(track.spotifyId).then(coverUrl => {
-          if (coverUrl) {
-            const img = document.createElement('img');
-            img.src = coverUrl;
-            img.alt = track.title + ' - ' + track.artist;
-            img.onload = () => { coverDiv.innerHTML = ''; coverDiv.appendChild(img); };
-            img.onerror = () => coverDiv.innerHTML = '💿';
-          } else {
-            coverDiv.innerHTML = '💿';
-          }
-        });
-      }
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    // Funzione Spotify
-    function openSpotifyPlayer(id, title, artist) {
-      document.getElementById('track-title').textContent = title;
-      document.getElementById('track-artist').textContent = artist;
-      
-      const playerIframe = document.getElementById('sp-player');
-      // Configura l'iframe per Spotify (player piccolo)
-      playerIframe.width = '300';
-      playerIframe.height = '80';
-      playerIframe.src = `https://open.spotify.com/embed/track/${id}`;
-      
-      document.getElementById('overlay').style.display = 'flex';
-    }
-    
-    // Funzione Youtube
-    function openYoutubePlayer(id, title, artist) {
-      document.getElementById('track-title').textContent = title;
-      document.getElementById('track-artist').textContent = artist;
-      
-      const playerIframe = document.getElementById('sp-player');
-      // Configura l'iframe per YouTube (player grande, formato 16:9)
-      playerIframe.width = '352'; 
-      playerIframe.height = '198'; 
-      playerIframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-      
-      document.getElementById('overlay').style.display = 'flex';
-    }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
 
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
 
-    function closePlayer() {
-      document.getElementById('overlay').style.display = 'none';
-      // Ferma la riproduzione resettando la sorgente
-      document.getElementById('sp-player').src = ''; 
-    }
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
 
-    document.getElementById('overlay').addEventListener('click', e => {
-      if (e.target.id === 'overlay') closePlayer();
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === "Escape") closePlayer();
-    });
+        .album-cover {
+            text-align: center;
+            margin: 30px 0;
+        }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderCD('CD1');
-      document.getElementById('cdSel').value = 'CD1';
-    });
-  </script>
+        .album-cover img {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .album-cover img:hover {
+            transform: scale(1.05);
+        }
+
+        .volume-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .volume-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .song-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .song-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .song-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+            border-left-color: #ffd700;
+        }
+
+        .song-info {
+            flex: 1;
+        }
+
+        .song-number {
+            font-weight: bold;
+            color: #ffd700;
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+
+        .song-title {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .song-year {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-left: 10px;
+        }
+
+        .song-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-spotify {
+            background: #1DB954;
+            color: white;
+        }
+
+        .btn-spotify:hover {
+            background: #1ed760;
+            transform: scale(1.05);
+        }
+
+        .btn-youtube {
+            background: #FF0000;
+            color: white;
+        }
+
+        .btn-youtube:hover {
+            background: #ff3333;
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .song-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .song-links {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Queen Greatest Hits</h1>
+            <p class="subtitle">The Platinum Collection - I, II & III</p>
+            <p class="subtitle">45 brani indimenticabili</p>
+        </header>
+
+        <div class="album-cover">
+            <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Queen_Greatest_Hits.png" alt="Queen Greatest Hits Cover" onerror="this.src='https://via.placeholder.com/400x400/667eea/ffffff?text=Queen+Greatest+Hits'">
+        </div>
+
+        <!-- VOLUME I -->
+        <div class="volume-section">
+            <h2 class="volume-title">📀 Greatest Hits I (1981)</h2>
+            <div class="song-list" id="volume1"></div>
+        </div>
+
+        <!-- VOLUME II -->
+        <div class="volume-section">
+            <h2 class="volume-title">📀 Greatest Hits II (1991)</h2>
+            <div class="song-list" id="volume2"></div>
+        </div>
+
+        <!-- VOLUME III -->
+        <div class="volume-section">
+            <h2 class="volume-title">📀 Greatest Hits III (1999)</h2>
+            <div class="song-list" id="volume3"></div>
+        </div>
+
+        <footer>
+            <p>🎸 Queen - La band leggendaria che ha cambiato la storia della musica rock</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Freddie Mercury • Brian May • Roger Taylor • John Deacon</p>
+        </footer>
+    </div>
+
+    <script>
+        const songs = {
+            volume1: [
+                { title: "Bohemian Rhapsody", year: "1975", spotify: "https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv", youtube: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ" },
+                { title: "Another One Bites the Dust", year: "1980", spotify: "https://open.spotify.com/track/57JVGBtBLCfHw2muk5416J", youtube: "https://www.youtube.com/watch?v=rY0WxgSXdEE" },
+                { title: "Killer Queen", year: "1974", spotify: "https://open.spotify.com/track/76lBPKQDnCJYRdHJBEy3Q6", youtube: "https://www.youtube.com/watch?v=2ZBtPf7FOoM" },
+                { title: "Fat Bottomed Girls", year: "1978", spotify: "https://open.spotify.com/track/5PhYu3TErziCdLkKV2Ecmj", youtube: "https://www.youtube.com/watch?v=VMnjF1O4eH0" },
+                { title: "Bicycle Race", year: "1978", spotify: "https://open.spotify.com/track/60xosW3mvXYlnLhRhTNnPv", youtube: "https://www.youtube.com/watch?v=GugsCdLHm-Q" },
+                { title: "You're My Best Friend", year: "1975", spotify: "https://open.spotify.com/track/7XgbJDXA3khn8F3oYo8jTZ", youtube: "https://www.youtube.com/watch?v=HaZpZQG2z10" },
+                { title: "Don't Stop Me Now", year: "1978", spotify: "https://open.spotify.com/track/5T8EDUDqKcs6OSOwEsfqG7", youtube: "https://www.youtube.com/watch?v=HgzGwKwLmgM" },
+                { title: "Save Me", year: "1980", spotify: "https://open.spotify.com/track/3IRtEPzlxYhXaJfqZQq2vY", youtube: "https://www.youtube.com/watch?v=MmL3oTlsTEg" },
+                { title: "Crazy Little Thing Called Love", year: "1979", spotify: "https://open.spotify.com/track/7qjnI83VE4fgCJ4xQ1N73t", youtube: "https://www.youtube.com/watch?v=zO6D_BAuYCI" },
+                { title: "Somebody to Love", year: "1976", spotify: "https://open.spotify.com/track/4lIc16qOy5MHjZs1BohUlj", youtube: "https://www.youtube.com/watch?v=kijpcUv-b8M" },
+                { title: "Now I'm Here", year: "1974", spotify: "https://open.spotify.com/track/2t4rl0dFJYhVN6bHPyBzhL", youtube: "https://www.youtube.com/watch?v=nVwsLHZeSYk" },
+                { title: "Good Old-Fashioned Lover Boy", year: "1976", spotify: "https://open.spotify.com/track/4ZTwWPXQI86OdVYYE9eYKu", youtube: "https://www.youtube.com/watch?v=c0N4m_q4E1I" },
+                { title: "Play the Game", year: "1980", spotify: "https://open.spotify.com/track/1dIuqCGZ1tVgXlECGBbCHJ", youtube: "https://www.youtube.com/watch?v=6_5O-nUiZ_0" },
+                { title: "Flash", year: "1980", spotify: "https://open.spotify.com/track/4NhBqRiPvDCZfgzzkrAqwm", youtube: "https://www.youtube.com/watch?v=MS4_Z84-rRE" },
+                { title: "Seven Seas of Rhye", year: "1974", spotify: "https://open.spotify.com/track/7oGPJZMe2pVvGrLZCVXcNu", youtube: "https://www.youtube.com/watch?v=H2P_0fJEgC4" },
+                { title: "We Will Rock You", year: "1977", spotify: "https://open.spotify.com/track/4pbJqGIASGPr0ZpGpnWkDn", youtube: "https://www.youtube.com/watch?v=-tJYN-eG1zk" },
+                { title: "We Are the Champions", year: "1977", spotify: "https://open.spotify.com/track/7ccI9cStQbQdystvc6TvxD", youtube: "https://www.youtube.com/watch?v=04854XqcfCY" }
+            ],
+            volume2: [
+                { title: "A Kind of Magic", year: "1986", spotify: "https://open.spotify.com/track/4F5YgB8GWJyHLGaWn9LxvS", youtube: "https://www.youtube.com/watch?v=0p_1QSUsbsM" },
+                { title: "Under Pressure", year: "1981", spotify: "https://open.spotify.com/track/1fmN6OZ8AhjudMJMTC96vC", youtube: "https://www.youtube.com/watch?v=a01QQZyl-_I" },
+                { title: "Radio Ga Ga", year: "1984", spotify: "https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8", youtube: "https://www.youtube.com/watch?v=azdwsXLmrHE" },
+                { title: "I Want It All", year: "1989", spotify: "https://open.spotify.com/track/2wnWRoDMD7ohzuMCDgxcSt", youtube: "https://www.youtube.com/watch?v=hFDcoX7s6rE" },
+                { title: "I Want to Break Free", year: "1984", spotify: "https://open.spotify.com/track/4wNQAZYJx32Hj7lxt0b7lJ", youtube: "https://www.youtube.com/watch?v=f4Mc-NYPHaQ" },
+                { title: "Innuendo", year: "1991", spotify: "https://open.spotify.com/track/0RSeNTq0WHBPIy0N6xFsGG", youtube: "https://www.youtube.com/watch?v=g2N0TkfrQhY" },
+                { title: "It's a Hard Life", year: "1984", spotify: "https://open.spotify.com/track/79CgGmZR6Z2jwQxMYYOyZ0", youtube: "https://www.youtube.com/watch?v=uHP-qgzUVLM" },
+                { title: "Breakthru", year: "1989", spotify: "https://open.spotify.com/track/1Z5gOt8dNjTh7P1Asa8wSF", youtube: "https://www.youtube.com/watch?v=CEjU9KVABao" },
+                { title: "Who Wants to Live Forever", year: "1986", spotify: "https://open.spotify.com/track/3xHCKbW7ysbJsLCbrtV52K", youtube: "https://www.youtube.com/watch?v=_Jtpf8N5IDE" },
+                { title: "Headlong", year: "1991", spotify: "https://open.spotify.com/track/7vXHNjjNb6PAMmjXYLnIHv", youtube: "https://www.youtube.com/watch?v=LRH2YJfUvOE" },
+                { title: "The Miracle", year: "1989", spotify: "https://open.spotify.com/track/24zGNbGDY68WbvSJSGYQbp", youtube: "https://www.youtube.com/watch?v=aOvh1yQvlnE" },
+                { title: "I'm Going Slightly Mad", year: "1991", spotify: "https://open.spotify.com/track/0WWs4uvmpLmqbhzUvbBz44", youtube: "https://www.youtube.com/watch?v=Od6hY_50Dh0" },
+                { title: "The Invisible Man", year: "1989", spotify: "https://open.spotify.com/track/0ZnPqC2uFv7YfUwBg76v0I", youtube: "https://www.youtube.com/watch?v=eQALCyJ10O0" },
+                { title: "Hammer to Fall", year: "1984", spotify: "https://open.spotify.com/track/0P3nPBQNGNQxDdxUxLWS16", youtube: "https://www.youtube.com/watch?v=JU5LMG3WFBw" },
+                { title: "Friends Will Be Friends", year: "1986", spotify: "https://open.spotify.com/track/6ELmHajjrRPpsTFNaGJqPb", youtube: "https://www.youtube.com/watch?v=SLaA4bbuSSs" },
+                { title: "The Show Must Go On", year: "1991", spotify: "https://open.spotify.com/track/3LciKLkPWtj9rY1g2V8RwX", youtube: "https://www.youtube.com/watch?v=t99KH0TR-J4" },
+                { title: "One Vision", year: "1985", spotify: "https://open.spotify.com/track/2iXPZE1y2o3OJJLOcX4xUd", youtube: "https://www.youtube.com/watch?v=0_1IMZmJe-U" }
+            ],
+            volume3: [
+                { title: "The Show Must Go On", year: "1991", spotify: "https://open.spotify.com/track/3LciKLkPWtj9rY1g2V8RwX", youtube: "https://www.youtube.com/watch?v=t99KH0TR-J4" },
+                { title: "Under Pressure", year: "1981", spotify: "https://open.spotify.com/track/1fmN6OZ8AhjudMJMTC96vC", youtube: "https://www.youtube.com/watch?v=a01QQZyl-_I" },
+                { title: "Barcelona", year: "1987", spotify: "https://open.spotify.com/track/2SiXAy7TuUkycRVbbWDEpo", youtube: "https://www.youtube.com/watch?v=C6KaCRjUuys" },
+                { title: "Too Much Love Will Kill You", year: "1988", spotify: "https://open.spotify.com/track/4h9wh7iOZ0GGn1EXQ0xLsP", youtube: "https://www.youtube.com/watch?v=ivbO3s1udic" },
+                { title: "Somebody to Love", year: "1976", spotify: "https://open.spotify.com/track/4lIc16qOy5MHjZs1BohUlj", youtube: "https://www.youtube.com/watch?v=kijpcUv-b8M" },
+                { title: "You Don't Fool Me", year: "1995", spotify: "https://open.spotify.com/track/2hYqW0jxh8gSxXdkrqG1JJ", youtube: "https://www.youtube.com/watch?v=K0miK6Zzz9w" },
+                { title: "Heaven for Everyone", year: "1995", spotify: "https://open.spotify.com/track/7z1jGcW9qnxgKlsWXMk3OD", youtube: "https://www.youtube.com/watch?v=pD1gDSao1eY" },
+                { title: "Las Palabras de Amor", year: "1982", spotify: "https://open.spotify.com/track/7AiRiAjVc9VUhXJaW0vTxZ", youtube: "https://www.youtube.com/watch?v=gAjYneLHMeo" },
+                { title: "Driven by You", year: "1991", spotify: "https://open.spotify.com/track/4LFXuLfBqX8KVG8p8HuLXl", youtube: "https://www.youtube.com/watch?v=BLhNfD9N9Ss" },
+                { title: "Living on My Own", year: "1985", spotify: "https://open.spotify.com/track/3r7hpgQlCZBHRNQfE18mfz", youtube: "https://www.youtube.com/watch?v=o-urnlaJpOA" },
+                { title: "Let Me Live", year: "1995", spotify: "https://open.spotify.com/track/1wslG9pvdGYhHJ2YQlkQUu", youtube: "https://www.youtube.com/watch?v=TjgSnJyjGfo" }
+            ]
+        };
+
+        function renderSongs(volume, containerId) {
+            const container = document.getElementById(containerId);
+            volume.forEach((song, index) => {
+                const songItem = document.createElement('div');
+                songItem.className = 'song-item';
+                songItem.innerHTML = `
+                    <div class="song-info">
+                        <span class="song-number">${index + 1}.</span>
+                        <span class="song-title">${song.title}</span>
+                        <span class="song-year">(${song.year})</span>
+                    </div>
+                    <div class="song-links">
+                        <a href="${song.spotify}" target="_blank" class="btn btn-spotify" title="Ascolta su Spotify">
+                            🎵 Spotify
+                        </a>
+                        <a href="${song.youtube}" target="_blank" class="btn btn-youtube" title="Guarda su YouTube">
+                            ▶️ YouTube
+                        </a>
+                    </div>
+                `;
+                container.appendChild(songItem);
+            });
+        }
+
+        // Render all volumes
+        renderSongs(songs.volume1, 'volume1');
+        renderSongs(songs.volume2, 'volume2');
+        renderSongs(songs.volume3, 'volume3');
+    </script>
 </body>
 </html>
+
 
 
 

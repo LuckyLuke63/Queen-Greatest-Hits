@@ -363,12 +363,14 @@
 
         function closeCurrentPlayer() {
     if (currentPlayer) {
-        // Ferma la riproduzione di YouTube ricaricando l'iframe
-        const youtubeIframe = currentPlayer.querySelector('iframe[src*="youtube"]');
-        if (youtubeIframe) {
-            const originalSrc = youtubeIframe.src;
-            youtubeIframe.src = '';
-            youtubeIframe.src = originalSrc;
+        // Ferma la riproduzione rimuovendo completamente l'src
+        const iframe = currentPlayer.querySelector('iframe');
+        if (iframe) {
+            const originalSrc = iframe.src;
+            iframe.src = 'about:blank';
+            setTimeout(() => {
+                iframe.src = originalSrc;
+            }, 100);
         }
         
         currentPlayer.classList.remove('active');
@@ -448,6 +450,7 @@
     </script>
 </body>
 </html>
+
 
 
 

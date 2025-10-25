@@ -193,11 +193,37 @@
             margin-top: 15px;
             display: none;
             animation: slideDown 0.3s ease;
+            position: relative;
+            padding-top: 10px;
         }
 
         .player-container.active {
             display: block;
         }
+
+        .close-player {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #ff4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 32px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        z-index: 100;
+        transition: all 0.3s ease;
+    }
+
+.close-player:hover {
+    background: #ff6666;
+    transform: scale(1.1);
+}
 
         @keyframes slideDown {
             from {
@@ -336,23 +362,23 @@
         let currentPlayer = null;
 
         function closeCurrentPlayer() {
-            if (currentPlayer) {
-                // Ferma la riproduzione di YouTube ricaricando l'iframe
-                const youtubeIframe = currentPlayer.querySelector('iframe[src*="youtube"]');
-                if (youtubeIframe) {
-                    const originalSrc = youtubeIframe.src;
-                    youtubeIframe.src = '';
-                    youtubeIframe.src = originalSrc;
-                }
-                
-                currentPlayer.classList.remove('active');
-                const activeItem = document.querySelector('.song-item.active');
-                if (activeItem) {
-                    activeItem.classList.remove('active');
-                }
-                currentPlayer = null;
-            }
+    if (currentPlayer) {
+        // Ferma la riproduzione di YouTube ricaricando l'iframe
+        const youtubeIframe = currentPlayer.querySelector('iframe[src*="youtube"]');
+        if (youtubeIframe) {
+            const originalSrc = youtubeIframe.src;
+            youtubeIframe.src = '';
+            youtubeIframe.src = originalSrc;
         }
+        
+        currentPlayer.classList.remove('active');
+        const activeItem = document.querySelector('.song-item.active');
+        if (activeItem) {
+            activeItem.classList.remove('active');
+        }
+        currentPlayer = null;
+    }
+}
 
         function openPlayer(playerId, songItem) {
             const playerContainer = document.getElementById(playerId);
@@ -420,6 +446,7 @@
     </script>
 </body>
 </html>
+
 
 
 

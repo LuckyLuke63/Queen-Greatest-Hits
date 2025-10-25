@@ -385,7 +385,7 @@
                         </div>
                     </div>
                     <div class="player-container" id="${songId}-spotify">
-                        <iframe src="https://open.spotify.com/embed/track/${song.spotifyId}" 
+                        <iframe loading="lazy" src="https://open.spotify.com/embed/track/${song.spotifyId}" 
                                 height="152" 
                                 frameborder="0" 
                                 allowtransparency="true" 
@@ -393,7 +393,7 @@
                         </iframe>
                     </div>
                     <div class="player-container" id="${songId}-youtube">
-                        <iframe src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1" 
+                        <iframe loading="lazy" src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1" 
                                 height="315" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -412,6 +412,7 @@
     </script>
 </body>
 </html>
+
 
 
 
